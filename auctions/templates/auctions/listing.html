@@ -1,0 +1,76 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title %}
+    {{ listing.title }}
+{% endblock %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+        <h2>Listing: {{ listing.title }}</h2>
+        {% if listing in user.watchlist.all %}
+            <p><a href="{% url 'watchlist-remove' listing.pk %}" class="watchlist">Remove from watchlist</a></p>
+        {% else %}
+            <p><a href="{% url 'watchlist-add' listing.pk %}" class="watchlist">Add to watchlist</a></p>
+        {% endif %}
+        {% if listing.image %}
+            <img src="{{ listing.image.url }}" alt="{{ listing.image }}" width="800">
+        {% endif %}
+        <p>{{ listing.description }}</p>
+        <h3>${{ listing.price }}.00</h3>
+        {% if listing.active %}
+            <form action="{% url 'open-listing' listing.pk %}" method="post">
+                {% csrf_token %}
+                {% if message_1 %}
+                    <strong>{{ message_1 }}</strong>
+                    <br>
+                {% endif %}
+                {% if message %}
+                <b>{{ message }}</b>
+                {% endif %}
+                {{ form }}
+                <input type="submit" value="Предложить">
+            </form>
+        {% elif listing.active == False and user == winner %}
+            <h2>This listing had been closed. You are the winner!</h2>
+        {% else %}
+            {% if winner %}
+                <h2>This listing had been closed. {{ winner.username }} won the listing </h2>
+            {% else %}
+                <h2>This listing had been closed. Nobody won the listing </h2>
+            {% endif %}
+        {% endif %}
+        <h3>Details:</h3>
+        <ul>
+            <li>Listed by: {{ listing.owner.username }}</li>
+            {% if listing.category %}
+                <li>Category: {{ listing.category }}</li>
+            {% else %}
+                <li>Category: No categories</li>
+            {% endif %}
+        </ul>
+        {% if user == listing.owner %}
+            <p>Close the listing: </p>
+            <p><a class="close-listing" href="{% url 'close-listing' listing.pk %}">Close</a></p>
+        {% endif %}
+        <div class="comments">
+            <h3>Комментарии ({{ listing.comments.all.count }})</h3>
+            {% if listing.active %}
+            <form action="{% url 'comment' listing.pk %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="comment" id="comment">
+                <input type="submit" value="Прокомментировать">
+            </form>
+            {% endif %}
+            <ul>
+                {% for comment in listing.comments.all %}
+                    <hr>
+                    <li>
+                        <p><b>{{ comment.user }}</b></p>
+                        <p>{{ comment.text }}</p>
+                    </li>
+                    <hr>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}

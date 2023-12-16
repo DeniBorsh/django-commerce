@@ -1,0 +1,27 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title %}
+    watchlist
+{% endblock %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+        <h1>Watchlist</h1>
+        {% for listing in listings %}
+            <a href="{% url 'open-listing' listing.pk %}" class="listing-link">
+                <div class="listing-container">
+                    {% if listing.image %}
+                        <div class="listing-img">
+                            <img src="{{ listing.image.url }}" alt="" height="300">
+                        </div>
+                    {% endif %}
+                    <div class="listing-txt">
+                        <h3>{{ listing.title }}</h3>
+                        <p><span class="price">Price: </span>${{ listing.price }}.00</p>
+                        <p>{{ listing.description }}</p>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

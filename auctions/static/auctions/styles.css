@@ -1,0 +1,58 @@
+body {
+    padding: 10px;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+.listing-container {
+    width: 1700px;
+    margin: 30px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    display: flex;
+}
+
+a.listing-link:link {
+    color: black;
+}
+
+a.listing-link:hover {
+    color: black;
+    text-decoration: none;
+}
+
+a.listing-link:active {
+    color: black;
+}
+
+a.listing-link:visited {
+    color: black;
+}
+
+.listing-txt {
+    margin: 20px 0 0 50px;
+}
+
+.listing-img {
+    width: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.listing-img img {
+    max-width: 500px;
+}
+
+.price {
+    font-weight: 700;
+}
+
+.close-listing, .watchlist {
+    background: grey;
+    color: white;
+    font-size: 1rem;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
